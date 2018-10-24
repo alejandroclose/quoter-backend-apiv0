@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 const Product = require("../models/product");
+const ProductAssignment = require ("../models/productAssignment.js");
 
 /* GET product list. */
 
@@ -29,7 +30,15 @@ router.post("/new", function(req, res, next) {
     unit: req.body.unit
   });
 
-  //Create new product 
+  var productAssignment = new ProductAssignment({
+    user : 'user',
+    product : newProduct._id,
+    productName : req.body.name
+  });
+
+  
+
+  //Create new product in db
 
   newProduct.save(function(err) {
     if (err) {
@@ -40,7 +49,15 @@ router.post("/new", function(req, res, next) {
         product: newProduct
       });
     }
-  });
+  })
+  
+  productAssignment.save(function(err) {
+    if (err) {
+      res.json(err);
+    } else {
+      console.log('assigned')
+    }
+  })
 });
 
 //Assign product to user (use .save) 
@@ -58,6 +75,7 @@ router.get("/:id", function(req, res, next) {
     }
   });
 });
+
 
 // /* Edit product. */
 

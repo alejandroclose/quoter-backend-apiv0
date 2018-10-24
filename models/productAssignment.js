@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
+var Product = mongoose.model('Product');
 
 
 const productAssignmentSchema = new mongoose.Schema({
-  user: [ { type : ObjectId, ref: 'User' } ],
-  product: [{ type: ObjectId, ref:'Product'}],
+  // user string until auth
+  user: String,
+  product: { type: mongoose.Schema.ObjectId, ref: "Product" },
   productName: String
 },{
   timestamps: {
@@ -12,6 +14,7 @@ const productAssignmentSchema = new mongoose.Schema({
   },
 });
 
-const ProductAssignment = mongoose.model('Product', productAssignmentSchema);
+const ProductAssignment = mongoose.model('ProductAssignment', productAssignmentSchema);
 
 module.exports = ProductAssignment;
+
