@@ -9,6 +9,7 @@ const MongoStore = require('connect-mongo')(session);
 
 
 const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
 const productsRouter = require('./routes/products');
 
 mongoose.connect('mongodb://quoter:quoterapp-1234@ds139193.mlab.com:39193/quoter')
@@ -43,6 +44,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authRouter);
+app.use('/profile', userRouter);
 app.use('/products', productsRouter);
 
 // catch 404 and forward to error handler
