@@ -4,22 +4,37 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
-const indexRouter = require('./routes/index');
+
+const authRouter = require('./routes/auth');
 const productsRouter = require('./routes/products');
 
-mongoose.connect('mongodb://quoter:quoterapp-1234@ds139193.mlab.com:39193/quoter');
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Connection error:'));
-db.once('open', () => console.log(`Connected to quoter db`));
-
+mongoose.connect('mongodb://quoter:quoterapp-1234@ds139193.mlab.com:39193/quoter')
+.then(() => {
+  console.log("connected to db");
+})
+.catch((error) => {
+  console.error("errorrrrr!!!!", error);
+})
 
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+
+app.use(session({
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60 // 1 day
+  }),
+  secret: 'some-string',
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000
+  }
+}));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -27,12 +42,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/auth', authRouter);
 app.use('/products', productsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handler
@@ -43,7 +60,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({ error: err.statusMessage });
 });
 
 module.exports = app;

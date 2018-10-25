@@ -2,25 +2,29 @@ var express = require("express");
 var router = express.Router();
 
 const Product = require("../models/product");
-const ProductAssignment = require ("../models/productAssignment.js");
+const User = require("../models/user");
+
+const { isLoggedIn } = require('../helpers/is-logged');
 
 /* GET product list. */
 
-router.get("/", function(req, res, next) {
-  Product.find({}, function(err, productList) {
-    if (err) {
+router.use(isLoggedIn());
+
+router.get("/", (req, res, next) => {
+  Product.find({})
+    .then(products => {
+      res.status(200);
+      res.json(products);
+    })
+    .catch(err => {
+      res.status(500);
       res.json(err);
-    } else {
-      res.status(200).json(productList);
-    }
-  });
+    });
 });
 
 // /* POST new product. */
 
-router.post("/new", function(req, res, next) {
-  console.log("body", req.body);
-
+router.post("/", (req, res, next) => {
   var newProduct = new Product({
     name: req.body.name,
     description: req.body.description,
@@ -29,53 +33,39 @@ router.post("/new", function(req, res, next) {
     currency: req.body.currency,
     unit: req.body.unit
   });
-
-  var productAssignment = new ProductAssignment({
-    user : 'user',
-    product : newProduct._id,
-    productName : req.body.name
-  });
-
-  
-
   //Create new product in db
 
-  newProduct.save(function(err) {
-    if (err) {
-      res.json(err);
-    } else {
+  newProduct
+    .save()
+    .then(() => {
       res.json({
         message: "Product created",
         product: newProduct
       });
-    }
-  })
-  
-  productAssignment.save(function(err) {
-    if (err) {
+    })
+    .catch(err => {
+      res.status(200);
       res.json(err);
-    } else {
-      console.log('assigned')
-    }
-  })
+    });
 });
 
-//Assign product to user (use .save) 
+//Assign product to user (use .save)
 
 // /* GET product. */
 
-router.get("/:id", function(req, res, next) {
+router.get("/:id", (req, res, next) => {
   var id = req.params.id;
 
-  Product.findById(id, function(err, product) {
-    if (err) {
-      res.json(err);
-    } else {
+  Product.findById(id)
+    .then(product => {
+      res.status(200);
       res.json(product);
-    }
-  });
+    })
+    .catch(err => {
+      res.status(500);
+      res.json(err);
+    });
 });
-
 
 // /* Edit product. */
 
@@ -90,28 +80,34 @@ router.put("/:id", function(req, res, next) {
     unit: req.body.unit
   };
 
-  Product.findByIdAndUpdate(id, productToUpdate, function(err) {
-    if (err) {
+  Product.findByIdAndUpdate(id, productToUpdate)
+    .then(() => {
+      res.status(200);
+      res.json({
+        message: "Product updated"
+      });
+    })
+    .catch(err => {
+      res.status(500);
       res.json(err);
-    } else {
-      res.json({ message: "Product updated" });
-    }
-  });
+    });
 });
 
 /* Delete product. */
 
-router.delete('/:id', function(req, res, next) {
-  var id = req.params.id
+router.delete("/:id", (req, res, next) => {
+  var id = req.params.id;
 
-  Product.remove({ _id: id }, function(err){
-    if(err) {
-      res.json(err);
-    } else {
-      res.json({ message: "Product deleted" });
-    }
+  Product.findByIdAndDelete(id)
+  .then((result) => {
+    res.status(200)
+    res.json(result);
   })
-})
+  .catch(() => {
+    res.status(500)
+    res.json(err);
+  });
+});
 
 
 module.exports = router;
