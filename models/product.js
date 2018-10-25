@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// const User = mongoose.model('User');
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const productSchema = new mongoose.Schema({
   name: String ,
@@ -8,11 +8,10 @@ const productSchema = new mongoose.Schema({
   price: Number,
   currency: String,
   unit: String,
-  // owner: {
-  //   type: mongoose.Schema.ObjectId, ref: "User",
-  //   ref: 'User'
-  // }
-  // user: [ { type : ObjectId, ref: 'User' } ]
+  owner: {
+    type: ObjectId,
+    ref: 'User'
+  }
 },{
   timestamps: {
     createdAt: 'created_at',

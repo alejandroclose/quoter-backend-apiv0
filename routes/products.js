@@ -25,18 +25,19 @@ router.get("/", (req, res, next) => {
 // /* POST new product. */
 
 router.post("/", (req, res, next) => {
-  var newProduct = new Product({
+  const user = req.session.currentUser;
+  const newProduct = new Product({
     name: req.body.name,
     description: req.body.description,
     image: req.body.image,
     price: req.body.price,
     currency: req.body.currency,
-    unit: req.body.unit
+    unit: req.body.unit,
+    owner: user._id
   });
   //Create new product in db
 
-  newProduct
-    .save()
+  newProduct.save()
     .then(() => {
       res.json({
         message: "Product created",
