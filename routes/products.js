@@ -1,10 +1,10 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
 const Product = require("../models/product");
 const User = require("../models/user");
 
-const { isLoggedIn } = require('../helpers/is-logged');
+const { isLoggedIn } = require("../helpers/is-logged");
 
 /* GET product list. */
 
@@ -37,7 +37,8 @@ router.post("/", (req, res, next) => {
   });
   //Create new product in db
 
-  newProduct.save()
+  newProduct
+    .save()
     .then(() => {
       res.json({
         message: "Product created",
@@ -49,8 +50,6 @@ router.post("/", (req, res, next) => {
       res.json(err);
     });
 });
-
-//Assign product to user (use .save)
 
 // /* GET product. */
 
@@ -70,7 +69,7 @@ router.get("/:id", (req, res, next) => {
 
 // /* Edit product. */
 
-router.put("/:id", function(req, res, next) {
+router.put("/:id", (req, res, next) => {
   var id = req.params.id;
   var productToUpdate = {
     name: req.body.name,
@@ -100,15 +99,14 @@ router.delete("/:id", (req, res, next) => {
   var id = req.params.id;
 
   Product.findByIdAndDelete(id)
-  .then((result) => {
-    res.status(200)
-    res.json(result);
-  })
-  .catch(() => {
-    res.status(500)
-    res.json(err);
-  });
+    .then(result => {
+      res.status(200);
+      res.json(result);
+    })
+    .catch(() => {
+      res.status(500);
+      res.json(err);
+    });
 });
-
 
 module.exports = router;

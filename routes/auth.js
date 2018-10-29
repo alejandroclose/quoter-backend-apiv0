@@ -11,7 +11,7 @@ router.get('/me', (req, res, next) => {
     res.json(req.session.currentUser);
   } else {
     res.status(404).json({
-      error: 'not-found'
+      error: 'not-found /me'
     });
   }
 });
