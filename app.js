@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
+var cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -12,17 +13,41 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const productsRouter = require('./routes/products');
 
-mongoose.connect('mongodb://quoter:quoterapp-1234@ds139193.mlab.com:39193/quoter')
+mongoose.connect('mongodb://quoter:quoterapp-1234@ds139193.mlab.com:39193/quoter', {useNewUrlParser: true})
 .then(() => {
   console.log("connected to db");
 })
 .catch((error) => {
-  console.error("errorrrrr!!!!", error);
+  console.error("error connecting to db!!", error);
 })
 
 var app = express();
 
 // view engine setup
+
+//CORS FIX
+
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, OPTIONS, DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   next();
+// });
+
+// app.use(cors({
+//   origin: 'http://localhost:3000',
+//   credentials: true,
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+// }));
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 app.use(session({
   store: new MongoStore({
