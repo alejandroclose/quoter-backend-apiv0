@@ -1,6 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
-var cors = require('cors');
+const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -36,19 +36,19 @@ var app = express();
 //   next();
 // });
 
-// app.use(cors({
-//   origin: 'http://localhost:3000',
-//   credentials: true,
-//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-// }));
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+}));
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS,DELETE');
+//   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   next();
+// });
 
 app.use(session({
   store: new MongoStore({
