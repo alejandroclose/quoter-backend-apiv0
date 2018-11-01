@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
-const productSchema = new mongoose.Schema({
+const quoteSchema = new mongoose.Schema({
   name: String,
   customer_name: String,
   customer_address: String,

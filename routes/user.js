@@ -34,4 +34,18 @@ router.get('/products', isLoggedIn(), (req, res, next) => {
     })
 })
 
+router.get('/quotes', isLoggedIn(), (req, res, next) => {
+  const user = req.session.currentUser;
+
+  Quote.find({ owner: user._id})
+  .then((result) => {
+    res.status(200);
+    res.json(result)
+  })
+  .catch((error) => {
+    res.status(500);
+    res.json(error);
+  })
+})
+
 module.exports = router;
