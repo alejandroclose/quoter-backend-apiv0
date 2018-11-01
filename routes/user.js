@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 const Product = require('../models/product');
+const Quote = require('../models/quote');
 const { isLoggedIn } = require('../helpers/is-logged');
 
 router.get('/', isLoggedIn(), (req, res, next) => {
@@ -44,7 +45,7 @@ router.get('/quotes', isLoggedIn(), (req, res, next) => {
   })
   .catch((error) => {
     res.status(500);
-    res.json(error);
+    res.json("err!",error);
   })
 })
 

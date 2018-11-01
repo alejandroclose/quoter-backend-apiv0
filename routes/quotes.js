@@ -14,7 +14,7 @@ router.get("/", (req, res, next) => {
   Quote.find({})
   .then(quotes => {
     res.status(200);
-    res.json(products);
+    res.json(quotes);
   })
   .catch(err => {
     res.status(500);
