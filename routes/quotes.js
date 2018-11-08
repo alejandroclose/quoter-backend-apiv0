@@ -31,7 +31,7 @@ router.post("/", (req, res, next) => {
     customer_name: req.body.customer_name,
     customer_address: req.body.customer_address,
     customer_email: req.body.customer_email,
-    products: req.body.products, //Where do I get the products from?
+    products: req.body.productsArr, //Where do I get the products from?
     owner: user._id
   });
 
