@@ -13,6 +13,7 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const productsRouter = require('./routes/products');
 const quotesRouter = require('./routes/quotes');
+const quoteRouter = require('./routes/quote');
 
 mongoose.connect('mongodb://quoter:quoterapp-1234@ds139193.mlab.com:39193/quoter', {useNewUrlParser: true})
 .then(() => {
@@ -73,6 +74,7 @@ app.use('/auth', authRouter);
 app.use('/profile', userRouter);
 app.use('/products', productsRouter);
 app.use('/quotes', quotesRouter);
+app.use('/quote', quoteRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
