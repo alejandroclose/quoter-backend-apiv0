@@ -73,7 +73,7 @@ router.put("/:id", (req, res, next) => {
     customer_name: req.body.customer_name,
     customer_address: req.body.customer_address,
     customer_email: req.body.customer_email,
-    products: req.body, //Where do I get the products from?
+    products: req.body.productsArr //Where do I get the products from?
   };
 
   Quote.findByIdAndUpdate(id, quoteToUpdate)
