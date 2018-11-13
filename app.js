@@ -40,7 +40,7 @@ var app = express();
 // });
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://quoter-fa241.firebaseapp.com',
   credentials: true,
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }));
