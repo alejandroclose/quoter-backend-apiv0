@@ -17,7 +17,7 @@ const quoteRouter = require('./routes/quote');
 
 require('dotenv').config();
 
-mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true})
+mongoose.connect("mongodb://quoter:quoterapp-1234@ds139193.mlab.com:39193/quoter", {useNewUrlParser: true})
 .then(() => {
   console.log("connected to db");
 })
