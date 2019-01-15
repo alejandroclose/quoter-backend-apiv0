@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 const Product = require('../models/product');
+const Service = require('../models/service');
 const Quote = require('../models/quote');
 const { isLoggedIn } = require('../helpers/is-logged');
 
